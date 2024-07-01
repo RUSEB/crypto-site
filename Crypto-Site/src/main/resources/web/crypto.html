@@ -1,0 +1,192 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru" xml:lang="ru">
+<head>
+    <title>ШифрОнлайн - выбор шифра</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="./css/crypto.css">
+    <link rel="icon" type="image/x-icon" href="/pic/favicon.ico">
+</head>
+<body>
+<div class="top-bar">
+    <a href="https://equipped-precisely-ocelot.ngrok-free.app/" class="ico_name">
+        <img class="ico" src="./pic/favicon.ico">
+        <p class="site-name">Шифрование онлайн</p>
+    </a>
+</div>
+<div class="empty-container">
+</div>
+<div class="main-container">
+    <p class="choice-text">
+        Выбор шифрования
+    </p>
+    <div class="crypto-block">
+        <div class="description-name-container">
+            <div class="crypto-name">
+                <img class="crypto-pic" src="./pic/crypto.png">
+                <p>
+                    Шифр Цезаря
+                </p>
+            </div>
+            <div class="description-container">
+                <p>
+                    Шифр, при использовании которого каждая буква из открытого текста заменяется на такую букву, которая в алфавите находится на некотором постоянном числе позиций левее или правее от рассматриваемой буквы.
+                </p>
+            </div>
+        </div>
+        <div class="button-container">
+            <img class="button-pic" src="./pic/button.png" onclick="window.location.href='https://equipped-precisely-ocelot.ngrok-free.app/crypto/Caesar'"; style="cursor: pointer;">
+        </div>
+    </div>
+    <div class="crypto-block">
+        <div class="description-name-container">
+            <div class="crypto-name">
+                <img class="crypto-pic" src="./pic/crypto.png">
+                <p>
+                    Шифр AES
+                </p>
+
+            </div>
+            <div class="description-container">
+                <p>
+                    Симметричный криптографический алгоритм, который используется для защиты информации. Он был разработан и принят в качестве стандарта шифрования в 2001 году.
+                </p>
+            </div>
+        </div>
+        <div class="button-container">
+            <img class="button-pic" src="./pic/button.png" onclick="window.location.href='https://equipped-precisely-ocelot.ngrok-free.app/crypto/AES'"; style="cursor: pointer;">
+        </div>
+    </div>
+    <div class="crypto-block">
+        <div class="description-name-container">
+            <div class="crypto-name">
+                <img class="crypto-pic" src="./pic/crypto.png">
+                <p>
+                    Шифр RC4
+                </p>
+
+            </div>
+            <div class="description-container">
+                <p>
+                    Является симметричным потоковым шифром, разработанным в 1987 году Рональдом Ривестом. Он является одним из наиболее широко используемых криптографических алгоритмов и применяется во многих популярных протоколах, таких как WEP, WPA, SSL/TLS.
+                </p>
+            </div>
+        </div>
+        <div class="button-container">
+            <img class="button-pic" src="./pic/button.png" onclick="window.location.href='https://equipped-precisely-ocelot.ngrok-free.app/crypto/RC4'"; style="cursor: pointer;">
+        </div>
+    </div>
+    <div class="crypto-block" style="margin-bottom: 300px">
+        <div class="description-name-container">
+            <div class="crypto-name">
+                <img class="crypto-pic" src="./pic/crypto.png" >
+                <p>
+                    Шифр RSA
+                </p>
+
+            </div>
+            <div class="description-container">
+                <p>
+                    Криптографический алгоритм с открытым ключом, основывающийся на вычислительной сложности задачи факторизации больших полупростых чисел. Криптосистема RSA стала первой системой, пригодной и для шифрования, и для цифровой подписи.
+                </p>
+            </div>
+        </div>
+        <div class="button-container">
+            <img onclick="window.location.href='https://equipped-precisely-ocelot.ngrok-free.app/crypto/RSA'"; style="cursor: pointer;" class="button-pic" src="./pic/button.png">
+        </div>
+    </div>
+
+
+</div>
+<div class="end-container">
+    <div style="width: 100%; height: 100%; display: grid; grid-template-rows: 1fr 1fr 2fr;">
+        <p class="creator">
+            Сайт разработал  GUBAEV RUSLAN
+        </p>
+        <p style="text-align: center; color: white; font-size: 15pt;">
+            Сайт был разработан в рамках учебной практики, не используется в коммерческих целях.
+        </p>
+        <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
+            <a class="guap" href="https://guap.ru/" target="_blank">
+                <img src="./pic/guap.svg">
+            </a>
+        </div>
+    </div>
+</div>
+<script>
+    isAnimating = false; // Флаг, указывающий, идет ли анимация
+    const cryptoBlocks = document.querySelectorAll('.crypto-block');
+    cryptoBlocks.forEach(block => {
+        block.addEventListener('click', function() {
+            if (isAnimating) return;
+            // Сворачиваем все блоки
+            if(!this.classList.contains('open')){
+                cryptoBlocks.forEach(b => {if(b.classList.contains('open')){ closeElement(b) }});
+                openElement(this);
+            }
+        });
+
+    });
+
+    //Функция анимации блоков(Закрытие блока)
+    function closeElement(element) {
+        isAnimating = true; // Устанавливаем флаг, что анимация началась
+        var description = element.querySelector('.description-container');
+        var name = element.querySelector('.crypto-name');
+        var descriptionNameContainer = element.querySelector('.description-name-container');
+        var buttonElem = element.querySelector('.button-pic');
+        setTimeout(function() {
+            element.classList.remove('open');
+            element.classList.add('close');
+
+            name.classList.add('close');
+            name.classList.remove('open');
+            // descriptionNameContainer.classList.add('animate');
+
+        }, 1000); // Задержка 3 секунды между анимациями
+        description.classList.remove('open');
+        description.classList.add('close');
+
+        buttonElem.classList.remove('open');
+        buttonElem.classList.add('close');
+        setTimeout(() => {
+            isAnimating = false; // Сбрасываем флаг, когда анимация закончилась
+        }, 1500); // Задержка 2 секунды между анимациями
+    }
+    //Функция анимации блоков(Открытие блока)
+    function openElement(element){
+        isAnimating = true; // Устанавливаем флаг, что анимация началась
+        var description = element.querySelector('.description-container');
+        var name = element.querySelector('.crypto-name');
+        var descriptionNameContainer = element.querySelector('.description-name-container');
+        var buttonElem = element.querySelector('.button-pic');
+        setTimeout(function() {
+            description.classList.remove('close');
+            buttonElem.classList.remove('close');
+            description.classList.add('open');
+            buttonElem.classList.add('open');
+
+        }, 1000); // Задержка 3 секунды между анимациями
+        element.classList.remove('close');
+        element.classList.add('open');
+
+        name.classList.remove('close');
+        description.classList.remove('close');
+        name.classList.add('open');
+        description.classList.add('open');
+        centerElementOnScreen(element);
+        setTimeout(() => {
+            isAnimating = false; // Сбрасываем флаг, когда анимация закончилась
+        }, 2000); // Задержка 2 секунды между анимациями
+    }
+
+    //Прокрутка до открываемого объекта
+    function centerElementOnScreen(element) {
+        element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+        });
+    }
+</script>
+
+</body>
+</html>

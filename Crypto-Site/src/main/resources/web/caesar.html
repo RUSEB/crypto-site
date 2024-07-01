@@ -1,0 +1,129 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org/" lang="ru" xml:lang="ru">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>ШифрОнлайн - шифр Цезаря</title>
+    <link rel="icon" type="image/x-icon" href="/pic/favicon.ico">
+    <link rel="stylesheet" href="/css/caesar.css">
+    <script th:inline="javascript">
+        //Прокрутка до необходимого поля после загрузки страницы
+        window.onload = function() {
+            var formSubmitted = /*[[${formSubmitted}]]*/ false;
+            var textEmpty = /*[[${textEmpty}]]*/ false;
+            if (textEmpty) {
+                scrollToObject('.err-flag',75);
+            }else if(formSubmitted){
+                scrollToObject('.button-container');
+            }
+
+        };
+
+        //Функция прокрутки
+        function scrollToObject(element, offset = 0) {
+            var objectToScrollTo = document.querySelector(element);
+            if (objectToScrollTo) {
+                window.scrollTo({
+                    top: objectToScrollTo.offsetTop - offset,
+                    behavior: 'smooth'
+                });
+            }
+        }
+        /*]]>*/
+    </script>
+</head>
+<body>
+<div class="top-bar">
+    <a href="https://equipped-precisely-ocelot.ngrok-free.app/" class="ico_name">
+        <img class="ico" src="/pic/favicon.ico">
+        <p class="site-name">Шифрование онлайн</p>
+    </a>
+</div>
+<div class="empty-container">
+</div>
+<div class="main-container">
+    <div class="title">
+        <h1>
+            Шифр Цезаря
+        </h1>
+    </div>
+    <div class="description">
+        <p>
+            Шифр Цезаря, также известный как шифр сдвига, код Цезаря или сдвиг Цезаря — один из самых простых и наиболее широко известных методов шифрования.
+        </p>
+        <p>
+            Шифр Цезаря — это вид шифра подстановки, в котором каждый символ в открытом тексте заменяется символом находящимся на некотором постоянном числе позиций левее или правее него в алфавите. Например, в шифре со сдвигом 3 А была бы заменена на Г, Б станет Д, и так далее.
+        </p>
+        <p>
+            Используемое преобразование обычно обозначают как ROTN, где N — сдвиг, ROT — сокращение от слова ROTATE, в данном случае «циклический сдвиг». Число разных преобразований конечно и зависит от длины алфавита. Для русского языка возможно 32 разных преобразования (преобразования ROT0 и ROT33 сохраняют исходный текст, а дальше начинаются уже повторения).
+        </p>
+    </div>
+    <form th:action="@{/crypto/Caesar/calculate}" method="post" th:object="${caesarObject}" class="err-flag">
+        <div class="txt-field">
+            <p>Поле для ввода текста</p>
+            <p th:if="${#fields.hasErrors('textToCipher')}" th:errors="*{textToCipher}" style="color: red; font-size:10pt"></p>
+            <textarea th:field="*{textToCipher}"></textarea>
+        </div>
+        <div class="step">
+            <p>Сдвиг</p>
+            <select th:field="*{shift}">
+                <option th:each="i : ${#numbers.sequence(1, 33)}" th:value="${i}" th:text="${i}"></option>
+            </select>
+        </div>
+        <div class="operation">
+            <p>Тип операции</p>
+            <select th:field="*{operation}">
+                <option th:value="Зашифровать">Зашифровать</option>
+                <option th:value="Расшифровать">Расшифровать</option>
+            </select>
+        </div>
+        <div class="button-container">
+            <button type="submit">Рассчитать</button>
+        </div>
+    </form>
+    <div class="txt-field-answr">
+        <p class="answr-text">
+            Преобразованный текст
+        </p>
+        <textarea th:text="${result}" id="txt-area-answr" readonly></textarea>
+        <img onclick="copyText()" src="/pic/copy.png">
+
+    </div>
+</div>
+<div class="end-container">
+    <div style="width: 100%; height: 100%; display: grid; grid-template-rows: 1fr 1fr 2fr;">
+        <p class="creator">
+            Сайт разработал  GUBAEV RUSLAN
+        </p>
+        <p style="text-align: center; color: white; font-size: 15pt;">
+            Сайт был разработан в рамках учебной практики, не используется в коммерческих целях.
+        </p>
+        <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
+            <a class="guap" href="https://guap.ru/" target="_blank">
+                <img src="/pic/guap.svg">
+            </a>
+        </div>
+    </div>
+</div>
+<script>
+    //Функция для кнопки копирования результата
+    function copyText() {
+        // Получаем текст из поля результата
+        var textToCopy = document.getElementById("txt-area-answr").value;
+
+        // Создаем временный элемент
+        var tempTextarea = document.createElement("textarea");
+        tempTextarea.value = textToCopy;
+        document.body.appendChild(tempTextarea);
+
+        // Выбирамем и копируем данные
+        tempTextarea.select();
+        document.execCommand("copy");
+
+        // Удаляем временный элемент
+        document.body.removeChild(tempTextarea);
+
+    }
+</script>
+
+</body>
+</html>

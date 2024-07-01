@@ -1,0 +1,200 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org/" lang="ru" xml:lang="ru">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>ШифрОнлайн - шифр RSA</title>
+    <link rel="icon" type="image/x-icon" href="/pic/favicon.ico">
+    <link rel="stylesheet" href="/css/rsa.css">
+    <script th:inline="javascript">
+        window.onload = function() {
+            // Получаем модальное окно
+            var modal = document.getElementById("myModal");
+            // Закрываем модальное окно при нажатии на кнопку "Закрыть"
+            var closeBtn = document.getElementById("closeModal");
+            closeBtn.onclick = function() {
+                modal.close();
+            }
+            var textToCipherError = /*[[${textToCipherError}]]*/ false;
+            var keysSizeError = /*[[${keysSizeError}]]*/ false;
+            var publicKeyError = /*[[${publicKeyError}]]*/  false;
+            var formSubmitted = /*[[${formSubmitted}]]*/ false;
+            var privateKeyError =/*[[${formSubmitted}]]*/ false;
+            var decryptError = /*[[${decryptError}]]*/ false;
+
+            if(decryptError){
+                modal.showModal();
+            }
+            if(textToCipherError){
+                scrollToObject('.err-flag',75);
+            }else if(keysSizeError){
+                scrollToObject('.key-size',75)
+            } else if(publicKeyError){
+                scrollToObject('.public-key',75)
+            }
+            else if(privateKeyError){
+                scrollToObject('.private-key',75)
+            }else if (formSubmitted) {
+                scrollToObject('.button-container');
+            }
+        };
+
+        function scrollToObject(element, offset = 0) {
+            var objectToScrollTo = document.querySelector(element);
+            if (objectToScrollTo) {
+                window.scrollTo({
+                    top: objectToScrollTo.offsetTop - offset,
+                    behavior: 'smooth'
+                });
+            }
+        }
+        /*]]>*/
+    </script>
+</head>
+<body>
+<div class="top-bar">
+    <a href="https://equipped-precisely-ocelot.ngrok-free.app/" class="ico_name">
+        <img class="ico" src="/pic/favicon.ico">
+        <p class="site-name">Шифрование онлайн</p>
+    </a>
+</div>
+<div class="empty-container">
+</div>
+<div class="main-container">
+    <div class="title">
+        <h1>
+            Шифр RSA
+        </h1>
+    </div>
+    <div class="description">
+        <p>
+            RSA (Rivest-Shamir-Adleman) является одной из первых криптосистем с открытым ключом и широко используется для безопасной передачи данных. В такой криптосистеме ключ шифрования является открытым и отличается от ключа расшифровки, который хранится в секрете (private). В RSA эта асимметрия основана на практической сложности факторизации произведения двух больших простых чисел, "проблема факторинга". Аббревиатура RSA состоит из начальных букв фамилий Рона Ривеста, Ади Шамира и Леонарда Адлемана, которые впервые публично описали алгоритм в 1978 году. Клиффорд Кокс, английский математик, работающий в Британском разведывательном управлении правительственной связи (GCHQ), разработал эквивалентную систему в 1973 году, но это не было рассекречено до 1997 года.
+        </p>
+        <p>
+            Пользователь RSA создает и затем публикует открытый ключ на основе двух больших простых чисел вместе с дополнительным значением. Простые числа должны храниться в секрете. Любой может использовать открытый ключ для шифрования сообщения, но с помощью опубликованных в данный момент методов, и если открытый ключ достаточно велик, только тот, кто знает простые числа, может расшифровать сообщение. Нарушение шифрования RSA известно как проблема RSA. Остается открытым вопрос, насколько это сложно, как проблема факторинга.
+        </p>
+        <p>
+            RSA является относительно медленным алгоритмом, и из-за этого он реже используется для прямого шифрования пользовательских данных. Чаще всего RSA передает зашифрованные общие ключи для шифрования с симметричным ключом, который, в свою очередь, может выполнять массовые операции шифрования-дешифрования на гораздо более высокой скорости.
+        </p>
+
+    </div>
+    <form method="post" th:action="@{/crypto/RSA/calculate}"  th:object="${rsaObject}" class="err-flag">
+        <div class="txt-field">
+            <p>Поле для ввода текста</p>
+            <p th:if="${#fields.hasErrors('textToCipher')}" th:errors="*{textToCipher}" style="font-size: 10pt; color: red"></p>
+            <textarea th:field="*{textToCipher}"></textarea>
+        </div>
+        <div class="key-size">
+            <span class="title-size">Размер ключей:</span><input th:field="*{keysSize}" id="key-size" type="text" size="2" maxlength="4" value="512"> <span style="font-size: 15pt; font-family: 'Times New Roman', Times, serif;margin-left: 5px;">бит</span>
+            <p th:if="${#fields.hasErrors('keysSize')}" th:errors="*{keysSize}" style="font-size: 10pt; color: red"></p>
+            <p hidden="hidden" id="key-js-error" style="font-size: 10pt; color: red">Размер ключа должен быть больше или равен 512</p>
+        </div>
+        <div class="public-key">
+            <p>Открытый ключ</p>
+            <p th:if="${#fields.hasErrors('publicKey')}" th:errors="*{publicKey}" style="font-size: 10pt; color: red"></p>
+            <textarea th:field="*{publicKey}" id="public-key"></textarea>
+        </div>
+        <div class="private-key">
+            <p>Закрытый ключ</p>
+            <p th:if="${#fields.hasErrors('privateKey')}" th:errors="*{privateKey}" style="font-size: 10pt; color: red"></p>
+            <textarea th:field="*{privateKey}" id="private-key"></textarea>
+        </div>
+        <div class="button-container">
+            <button type="button" onclick="fetchAndInsertKeys()">Сгенерировать ключи</button>
+        </div>
+        <div class="operation">
+            <p>Тип операции</p>
+            <select th:field="*{operation}">
+                <option th:value="Зашифровать">Зашифровать</option>
+                <option th:value="Расшифровать">Расшифровать</option>
+            </select>
+        </div>
+        <div class="button-container">
+            <button type="submit" th:formaction="@{/crypto/RSA/calculate}">Рассчитать</button>
+        </div>
+    </form>
+    <div class="txt-field-answr">
+        <p class="answr-text">
+            Преобразованный текст
+        </p>
+        <textarea th:text="${result}" id="txt-area-answr" readonly></textarea>
+        <img onclick="copyText()" src="/pic/copy.png">
+
+    </div>
+</div>
+<div class="end-container">
+    <div style="width: 100%; height: 100%; display: grid; grid-template-rows: 1fr 1fr 2fr;">
+        <p class="creator">
+            Сайт разработал  GUBAEV RUSLAN
+        </p>
+        <p style="text-align: center; color: white; font-size: 15pt;">
+            Сайт был разработан в рамках учебной практики, не используется в коммерческих целях.
+        </p>
+        <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
+            <a class="guap" href="https://guap.ru/" target="_blank">
+                <img src="/pic/guap.svg">
+            </a>
+        </div>
+    </div>
+</div>
+
+<dialog id="myModal">
+    <h2>Упс!</h2>
+    <p>При декодировании произошла ошибка.</p>
+    <button id="closeModal">Закрыть</button>
+</dialog>
+<script>
+    function fetchAndInsertKeys() {
+        // Получаем текущий URL страницы
+        const siteUrl = window.location.origin;
+
+        const keySize = document.querySelector('#key-size').value;
+        if(keySize<512){
+            document.getElementById('key-js-error').hidden = false;
+            return
+        }
+        document.getElementById('key-js-error').hidden = true;
+        // Делаем POST-запрос на /gen-keys
+        fetch(`${siteUrl}/crypto/RSA/gen-keys?keySize=${keySize}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ keySize })
+        })
+            .then(response => response.json())
+            .then(keys => {
+                // Находим поля, в которые нужно вставить ключи
+                const privateKey = document.getElementById('private-key');
+                const publicKey = document.getElementById('public-key');
+
+                // Вставляем ключи в поля
+                privateKey.value = keys.privateKey;
+                publicKey.value = keys.publicKey;
+            })
+            .catch(error => {
+                console.error('Ошибка при получении ключей:', error);
+            });
+    }
+</script>
+<script>
+    //Функция для кнопки копирования результата
+    function copyText() {
+        // Получаем текст из поля результата
+        var textToCopy = document.getElementById("txt-area-answr").value;
+
+        // Создаем временный элемент
+        var tempTextarea = document.createElement("textarea");
+        tempTextarea.value = textToCopy;
+        document.body.appendChild(tempTextarea);
+
+        // Выбирамем и копируем данные
+        tempTextarea.select();
+        document.execCommand("copy");
+
+        // Удаляем временный элемент
+        document.body.removeChild(tempTextarea);
+
+    }
+</script>
+</body>
+</html>

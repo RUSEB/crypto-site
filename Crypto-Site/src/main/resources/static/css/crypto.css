@@ -1,0 +1,295 @@
+/*Стили для crypto.html*/
+
+
+body {
+    overflow-x: hidden;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Добавление шрифта */
+@font-face {
+    font-family: 'TschicholdBOLD';
+    src: url('../font/Tschichold Bold.ttf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@media (min-height: 768px) {
+    .top-bar{
+        box-sizing: border-box;
+        position: fixed;
+        z-index: 0;
+        background-color: #263238;
+        width: 100%; /* устанавливает ширину div в 100% от ширины родительского элемента */
+        height: 5%; /* устанавливает ширину div в 10% от ширины родительского элемента */
+        padding-top: 5px;
+        padding-bottom: 5px;
+        padding-left: 15px;
+    }
+    .empty-container {
+        position: relative;
+        width: 100%;
+        height: 5vh; /* 10% высоты viewport */
+        z-index: -1;
+        background-color: #263238;
+    }
+    .first-row{
+        display: grid;
+        grid-template-rows:  1.25fr 2fr; /* 3 столбца равной ширины */
+        grid-gap: 20px; /* отступы между ячейками */
+        padding: 15px;
+    }
+    .block-50 {
+        order: 2;
+    }
+    .block2 {
+        order: 1;
+    }
+
+}
+@media (max-height: 769px) {
+    .top-bar{
+        box-sizing: border-box;
+        position: fixed;
+        z-index: 0;
+        background-color: #263238;
+        width: 100%; /* устанавливает ширину div в 100% от ширины родительского элемента */
+        height: 10%; /* устанавливает ширину div в 10% от ширины родительского элемента */
+        padding-top: 5px;
+        padding-bottom: 5px;
+        padding-left: 15px;
+
+    }
+    .empty-container {
+        position: relative;
+        width: 100%;
+        height: 10vh; /* 10% высоты viewport */
+        z-index: -1;
+        background-color: #263238;
+    }
+    .first-row{
+        display: grid;
+        grid-template-columns:  1.25fr 2fr; /* 3 столбца равной ширины */
+        grid-gap: 20px; /* отступы между ячейками */
+        padding: 15px;
+    }
+
+}
+
+
+.ico_name{
+    height: 100%;
+    width: max-content;
+    display: flex;
+    flex-direction: row; /* Расположение элементов в ряд */
+    justify-content: flex-start; /* Выравнивание по левому краю */
+    align-items: center; /* Вертикальное центрирование */
+    text-decoration: none; /* Убирает нижнее подчеркивание */
+}
+
+.ico {
+    height: 100%; /* Высота изображения 100% от высоты контейнера */
+    object-fit: contain; /* Изображение будет масштабировано, сохраняя пропорции */
+    margin-right: 10px;
+}
+
+.site-name{
+    font-family: "TschicholdBOLD", sans-serif;
+    font-size: 20pt;
+    color: white;
+}
+
+.main-container{
+    /* background-color: aqua; */
+    margin-top: 30px;
+    margin-left: 250px;
+    margin-right: 250px;
+}
+
+.choice-text{
+    margin-top: 100px;
+    font-family: 'Geometria',Arial,sans-serif;
+    font-weight: bold;
+    font-size: 25pt;
+    margin-left: 50px;
+}
+
+.crypto-block{
+    background-color: #eeeeee;
+    width: 100%;
+    height: 15vh;
+    margin-bottom: 10px;
+    border-radius: 15px;
+    transition: all 1s ease;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    overflow: hidden;
+    cursor: pointer;
+}
+.crypto-block.close{
+    height: 15vh;
+    cursor: pointer;
+}
+.crypto-block.open{
+    height: 35vh;
+    cursor: auto;
+}
+.crypto-title{
+    font-family: Franklin Gothic Medium,sans-serif;
+    font-size: 20pt;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    color: black;
+}
+.description-name-container{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    overflow: hidden;
+    flex-direction: column;
+}
+
+.crypto-name{
+    width: 100%;
+    font-size: 20pt;
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+    margin-top: 5px;
+    overflow: hidden;
+    min-height: 75%;
+    max-height: 75%;
+}
+.crypto-name.close{
+    animation: nameFont 1s ease-in-out forwards;
+}
+@keyframes nameFont {
+    0% {
+        min-height: 30%;
+        max-height: 30%;
+
+    }
+    100% {
+        min-height: 75%;
+        max-height: 75%;
+    }
+}
+.crypto-name.open{
+    min-height: 30%;
+    max-height: 30%;
+}
+.description-container p{
+    font-size: 16pt;
+    margin: 30px 15px 15px 15px;
+    text-indent: 25px; /* Добавляем отступ первой строки */
+    text-align: justify;
+}
+.description-container{
+    opacity: 0;
+    width: 100%;
+    min-height: 70%;
+    max-height: 70%;
+}
+.description-container.close{
+    animation: fadeOut 1s ease-in-out forwards;
+}
+.description-container.open{
+    animation: fadeIn 1s ease-in-out forwards;
+}
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(100%);
+
+    }
+}
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        display: block;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+.button-container{
+    width: 100%;
+    overflow: hidden;
+    align-items: center;
+    justify-content: end;
+    display: flex;
+}
+
+.crypto-pic{
+    height: 100%;
+    margin-right: 10px;
+}
+.button-pic{
+    opacity: 0;
+    height: 50%;
+    margin-right: 50px;
+    object-fit: contain; /* Изображение будет масштабировано, сохраняя пропорции */
+    z-index: 1;
+    transition: all 1.5s ease;
+}
+.button-pic:hover{
+    height: 55%;
+}
+
+
+.button-pic.open{
+    animation: buttonAnimOpen 0.75s ease-in-out forwards;
+}
+.button-pic.close{
+    animation: buttonAnimClose 0.75s ease-in-out forwards;
+}
+@keyframes buttonAnimClose {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(150%);
+    }
+}
+@keyframes buttonAnimOpen {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+* {
+    scrollbar-color: white #263238;
+}
+
+
+.end-container{
+    background-color: #263238;
+    width: 100%;
+    height: 50vh;
+}
+
+
+.creator{
+    font-family: "TschicholdBOLD", sans-serif;
+    text-align: center;
+    color: white;
+    font-size: 20pt;
+    text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;
+}
+
+.guap{
+    height: max-content;
+    width: max-content;
+}
+
